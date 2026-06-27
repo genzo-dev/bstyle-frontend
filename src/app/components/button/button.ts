@@ -15,15 +15,18 @@ export class Button {
   @Output() clicked = new EventEmitter<Event>();
 
   getClasses() {
+    const base =
+      'cursor-pointer transition px-4 py-2 rounded flex items-center justify-center gap-2';
+
     switch (this.variant) {
       case 'secondary':
-        return 'cursor-pointer bg-white text-white hover:brightness-75';
+        return `${base} bg-white text-black hover:brightness-75 disabled:opacity-50 disabled:cursor-not-allowed`;
       case 'danger':
-        return 'cursor-pointer bg-red-500 text-black hover:brightness-75';
+        return `${base} bg-red-500 text-black hover:brightness-75 disabled:opacity-50 disabled:cursor-not-allowed`;
       case 'ghost':
-        return 'bg-gray-700 text-white disabled:opacity-50';
+        return `${base} bg-gray-700 text-white disabled:opacity-50 disabled:cursor-not-allowed`;
       default:
-        return 'cursor-pointer bg-black text-white hover:brightness-75';
+        return `${base} bg-black text-white hover:brightness-75 disabled:opacity-50 disabled:cursor-not-allowed`;
     }
   }
 }

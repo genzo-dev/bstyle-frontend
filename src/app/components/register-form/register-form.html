@@ -1,0 +1,15 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <app-input label="Login:" placeholder="Digite seu login" controlName="login" />
+  <app-input label="Nome:" placeholder="Insira seu nome" controlName="nome" />
+  <app-input label="Senha:" type="password" placeholder="Insira sua senha" controlName="senha" />
+
+  <app-input label="Telefone:" placeholder="Telefone" controlName="telefone" />
+  <app-input label="Cidade:" placeholder="Cidade" controlName="cidade" />
+  <app-input label="Estado:" placeholder="Estado" controlName="estado" />
+  <app-input label="Rua:" placeholder="Rua" controlName="rua" />
+  <app-input label="Número:" placeholder="Número" controlName="numero" />
+  <app-input label="Foto de perfil:" placeholder="URL da foto" controlName="fotoPerfilUrl" />
+  <div class="col-span-1 sm:col-span-2">
+    <app-button type="submit" [loading]="isLoading"> Cadastrar </app-button>
+  </div>
+</form>

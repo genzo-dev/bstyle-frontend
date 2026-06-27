@@ -2,15 +2,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Button } from '../button/button';
 import { asyncDelay } from '../../utils/async-delay';
+import { InputComponent } from '../input/input';
 
 @Component({
-  selector: 'app-user-form',
+  selector: 'app-register-form',
   standalone: true,
-  imports: [ReactiveFormsModule, Button],
-  templateUrl: './user-form.html',
-  styleUrl: './user-form.css',
+  imports: [ReactiveFormsModule, Button, InputComponent],
+  templateUrl: './register-form.html',
 })
-export class UserForm {
+export class RegisterForm {
   @Input() initialData: any;
   @Output() onSubmit = new EventEmitter<any>();
 

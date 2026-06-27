@@ -1,17 +1,20 @@
 import { Component } from '@angular/core';
 import api from '../../../../libs/axios-config';
-import { UserForm } from '../../components/user-form/user-form';
 import { userSchema } from '../../schemas/user/user.schema';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
 import { CommonModule } from '@angular/common';
+import { RegisterForm } from '../../components/register-form/register-form';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [UserForm, CommonModule],
+  imports: [RegisterForm, CommonModule],
   templateUrl: './register.html',
 })
 export class Register {
+  constructor(private router: Router) {}
+
   errors: string[] = [];
 
   async handleSubmit(data: any) {
@@ -21,8 +24,7 @@ export class Register {
       const parsed = userSchema.parse(data);
 
       await api.post('/auth/registrar', parsed);
-      console.log('DEU BOM');
-      alert('Usuário criado com sucesso!');
+      this.router.navigate(['/login']);
     } catch (err) {
       if (err instanceof ZodError) {
         console.log('ERRO AQUI', err);
