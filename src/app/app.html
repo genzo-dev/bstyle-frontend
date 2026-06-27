@@ -5,16 +5,23 @@
         <a to="/" class="text-xl sm:text-3xl">BStyle</a>
       </div>
 
-      <div class="flex gap-2 sm:gap-8">
-        <app-link to="/register" class="sm:text-lg">Cadastro</app-link>
+      @if (auth.isLogged()) {
+        <div class="flex justify-center items-center gap-4 sm:gap-8">
+          <span>{{ auth.user()?.nome }}</span>
+          <app-button variant="danger" (clicked)="auth.logout()">Sair</app-button>
+        </div>
+      } @else {
+        <div class="flex gap-2 sm:gap-8">
+          <app-link to="/register" class="sm:text-lg">Cadastro</app-link>
 
-        <app-link
-          to="/login"
-          class="bg-white text-black rounded px-2 hover:brightness-75 sm:text-lg decoration-0 transition"
-        >
-          Entrar
-        </app-link>
-      </div>
+          <app-link
+            to="/login"
+            class="bg-white text-black rounded px-2 hover:brightness-75 sm:text-lg decoration-0 transition"
+          >
+            Entrar
+          </app-link>
+        </div>
+      }
     </nav>
   </header>
 

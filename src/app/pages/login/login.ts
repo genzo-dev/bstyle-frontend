@@ -5,6 +5,7 @@ import { loginSchema } from '../../schemas/auth/auth.schema';
 import api from '../../../../libs/axios-config';
 import { ZodError } from 'zod';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,8 @@ import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
   templateUrl: './login.html',
 })
 export class Login {
+  constructor(private router: Router) {}
+
   errors: string[] = [];
 
   async handleSubmit(data: any) {
@@ -27,6 +30,8 @@ export class Login {
       // Confirma usuário logado via requisição autenticada
       const getUsers = await api.get('/usuarios/perfil');
       console.log('Usuários encontrados:', getUsers);
+
+      this.router.navigate(['/']);
     } catch (err) {
       if (err instanceof ZodError) {
         this.errors = getZodErrorMessages(err.format());
