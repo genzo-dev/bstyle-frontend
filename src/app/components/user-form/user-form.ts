@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Button } from '../button/button';
+import { asyncDelay } from '../../utils/async-delay';
 
 @Component({
   selector: 'app-user-form',
@@ -51,7 +52,7 @@ export class UserForm {
     try {
       console.log('SUBMIT OK');
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await asyncDelay(2000);
       this.form.disabled;
       this.onSubmit.emit(this.form.value);
     } finally {
