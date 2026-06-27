@@ -1,0 +1,14 @@
+<div class="flex flex-col gap-1">
+  @if (label) {
+    <label class="text-sm font-medium">
+      {{ label }}
+    </label>
+  }
+
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [formControlName]="controlName"
+    [ngClass]="['border rounded px-3 py-2 outline-none transition border-gray-300', customClass]"
+  />
+</div>

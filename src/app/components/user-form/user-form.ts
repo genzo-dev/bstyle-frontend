@@ -2,13 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Button } from '../button/button';
 import { asyncDelay } from '../../utils/async-delay';
+import { InputComponent } from '../input/input';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [ReactiveFormsModule, Button],
+  imports: [ReactiveFormsModule, Button, InputComponent],
   templateUrl: './user-form.html',
-  styleUrl: './user-form.css',
 })
 export class UserForm {
   @Input() initialData: any;
