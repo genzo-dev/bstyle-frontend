@@ -1,13 +1,18 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, NgZone, signal } from '@angular/core';
 import api from '../../../libs/axios-config';
 import { User } from '../types/user.type';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user = signal<User | null>(null);
+  constructor(private ngZone: NgZone) {}
+
+  private _user = signal<User | null>(null);
+  user = this._user.asReadonly();
 
   setUser(user: User) {
-    this.user.set(user);
+    this.ngZone.run(() => {
+      this._user.set(user);
+    });
   }
 
   async loadUser() {
@@ -16,8 +21,8 @@ export class AuthService {
 
     try {
       const res = await api.get('/usuarios/perfil');
-      this.user.set(res.data);
-      return this.user;
+      this.setUser(res.data);
+      return res.data;
     } catch {
       this.logout();
       return null;
@@ -30,6 +35,8 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('auth');
-    this.user.set(null);
+    this.ngZone.run(() => {
+      this._user.set(null);
+    });
   }
 }

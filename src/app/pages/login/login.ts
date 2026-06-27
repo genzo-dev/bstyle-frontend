@@ -6,6 +6,7 @@ import api from '../../../../libs/axios-config';
 import { ZodError } from 'zod';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,10 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
 })
 export class Login {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public auth: AuthService,
+  ) {}
 
   errors: string[] = [];
 
@@ -30,6 +34,8 @@ export class Login {
       // Confirma usuário logado via requisição autenticada
       const getUsers = await api.get('/usuarios/perfil');
       console.log('Usuários encontrados:', getUsers);
+
+      await this.auth.loadUser();
 
       this.router.navigate(['/']);
     } catch (err) {
