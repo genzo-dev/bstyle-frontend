@@ -3,7 +3,7 @@
   [disabled]="disabled || loading"
   (click)="clicked.emit($event)"
   [ngClass]="getClasses()"
-  class="transition px-4 py-2 rounded flex items-center justify-center gap-2"
+  class="transition w-full px-4 py-2 rounded flex items-center justify-center gap-2"
 >
   @if (!loading) {
     <ng-content></ng-content>

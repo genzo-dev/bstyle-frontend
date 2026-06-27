@@ -2,8 +2,11 @@ import { z } from 'zod';
 
 export const userSchema = z.object({
   login: z.string(),
+  nome: z
+    .string()
+    .min(3, { message: 'O nome deve ter pelo menos 3 caracteres' })
+    .nonempty('Insira seu nome'),
   senha: z.string().nonempty('Insira uma senha'),
-  nome: z.string().min(3).nonempty('Insira seu nome'),
   telefone: z.string().optional(),
   cidade: z.string().optional(),
   estado: z.string().optional(),

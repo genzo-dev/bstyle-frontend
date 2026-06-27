@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import api from '../../../../libs/axios-config';
-import { UserForm } from '../../components/user-form/user-form';
 import { userSchema } from '../../schemas/user/user.schema';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
 import { CommonModule } from '@angular/common';
+import { RegisterForm } from '../../components/register-form/register-form';
 
 @Component({
   selector: 'app-register',
-  imports: [UserForm, CommonModule],
+  imports: [RegisterForm, CommonModule],
   templateUrl: './register.html',
 })
 export class Register {

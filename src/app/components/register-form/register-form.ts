@@ -5,12 +5,12 @@ import { asyncDelay } from '../../utils/async-delay';
 import { InputComponent } from '../input/input';
 
 @Component({
-  selector: 'app-user-form',
+  selector: 'app-register-form',
   standalone: true,
   imports: [ReactiveFormsModule, Button, InputComponent],
-  templateUrl: './user-form.html',
+  templateUrl: './register-form.html',
 })
-export class UserForm {
+export class RegisterForm {
   @Input() initialData: any;
   @Output() onSubmit = new EventEmitter<any>();
 
