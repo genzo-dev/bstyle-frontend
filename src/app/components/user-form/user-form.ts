@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Button } from '../button/button';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Button],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -12,6 +13,7 @@ export class UserForm {
   @Input() initialData: any;
   @Output() onSubmit = new EventEmitter<any>();
 
+  isLoading = false;
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -34,7 +36,9 @@ export class UserForm {
     }
   }
 
-  submit() {
+  async submit() {
+    if (this.isLoading) return;
+
     this.form.markAllAsTouched();
 
     if (!this.form.valid) {
@@ -42,7 +46,17 @@ export class UserForm {
       return;
     }
 
-    console.log('SUBMIT OK');
-    this.onSubmit.emit(this.form.value);
+    this.isLoading = true;
+
+    try {
+      console.log('SUBMIT OK');
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      this.form.disabled;
+      this.onSubmit.emit(this.form.value);
+    } finally {
+      this.isLoading = false;
+      this.form.enable;
+    }
   }
 }

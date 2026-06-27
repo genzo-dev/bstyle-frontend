@@ -12,5 +12,5 @@
   <input placeholder="Número" formControlName="numero" />
   <input placeholder="URL da foto" formControlName="fotoPerfilUrl" />
 
-  <button type="submit">Salvar</button>
+  <app-button type="submit" [loading]="isLoading">Salvar</app-button>
 </form>
