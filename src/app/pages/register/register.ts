@@ -21,7 +21,6 @@ export class Register {
       const parsed = userSchema.parse(data);
 
       await api.post('/auth/registrar', parsed);
-      console.log('DEU BOM');
       alert('Usuário criado com sucesso!');
     } catch (err) {
       if (err instanceof ZodError) {

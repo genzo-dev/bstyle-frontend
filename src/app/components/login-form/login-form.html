@@ -1,0 +1,8 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <app-input label="Login:" placeholder="Digite seu login" controlName="login" />
+  <app-input label="Senha:" type="password" placeholder="Insira sua senha" controlName="senha" />
+
+  <div>
+    <app-button type="submit" [loading]="isLoading"> Login </app-button>
+  </div>
+</form>
