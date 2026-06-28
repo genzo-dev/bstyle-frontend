@@ -31,14 +31,6 @@ O BStyle é um projeto em desenvolvimento para marketplace de um brechó.
           <b>TailwindCSS</b>
     </td>
     <td align="center">
-      <a href="https://axios.rest/" title="Axios">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/axios/axios-plain.svg" width="42px;" alt="Logo Axios"/><br>
-        <sub>
-        </sub>
-      </a>
-          <b>Axios</b>
-    </td>
-    <td align="center">
       <a href="https://zod.dev/" title="Zod">
         <img src="./public/zod_logo.png" width="42px;" alt="Logo Zod"/><br>
         <sub>
@@ -72,7 +64,7 @@ npm install
 
 ```sh
 
-cp enviroment-example.ts enviroment.ts
+cp environment-example.ts environment.ts
 
 ```
 
@@ -102,22 +94,23 @@ npm run build
 
 .
 ├── angular.json
-├── enviroment-example.ts # Exemplo das variáveis de ambiente
-├── libs # Bibliotecas/utilitários compartilhados do projeto
-│   └── axios-config.ts
+├── environment-example.ts # Exemplo das variáveis de ambiente
 ├── node_modules # Dependências instaladas via npm
 ├── package.json
 ├── package-lock.json
 ├── public # Arquivos públicos estáticos
 │   └── favicon.ico
 ├── README.md # Este arquivo
-├── src
-│   ├── app
-│   │   ├── components  # Componentes reutilizáveis da interface
-│   │   ├── pages # Páginas/telas da aplicação
-│   │   ├── schemas # Contratos de dados via Zod
-│   │   ├── utils # Funções utilitárias e helpers
-│   │   └── ...
+├── src/
+│   ├── app/
+│   │   ├── components/ # Componentes reutilizáveis da interface (UI)
+│   │   ├── interceptors/ # Interceptadores HTTP (ex: autenticação)
+│   │   │   └── auth.interceptor.ts
+│   │   ├── pages/ # Páginas da aplicação (nível de rota)
+│   │   ├── schemas/ # Validação e estrutura de dados (Zod)
+│   │   ├── services/ # Lógica de negócio e comunicação com APIs
+│   │   ├── types/ # Tipagens e contratos de dados com o backend
+│   │   └── utils/ # Funções utilitárias e helpers
 │   ├── index.html
 │   ├── main.server.ts
 │   ├── main.ts

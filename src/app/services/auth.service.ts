@@ -2,7 +2,7 @@ import { Injectable, NgZone, signal } from '@angular/core';
 import { User } from '../types/user.type';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { environment } from '../../../enviroment';
+import { environment } from '../../../environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -27,8 +27,6 @@ export class AuthService {
 
     try {
       const res = await firstValueFrom(this.http.get<User>(`${this.baseUrl}/usuarios/perfil`));
-
-      console.log('USER PERFIL:', res);
 
       this.setUser(res);
       return res;

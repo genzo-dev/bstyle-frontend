@@ -36,15 +36,12 @@ export class LoginForm {
     this.form.markAllAsTouched();
 
     if (!this.form.valid) {
-      console.log('FORM INVÁLIDO');
       return;
     }
 
     this.isLoading = true;
 
     try {
-      console.log('SUBMIT OK');
-
       await asyncDelay(2000);
       this.form.disabled;
       this.onSubmit.emit(this.form.value);

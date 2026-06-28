@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import api from '../../../../libs/axios-config';
 import { userSchema } from '../../schemas/user/user.schema';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
