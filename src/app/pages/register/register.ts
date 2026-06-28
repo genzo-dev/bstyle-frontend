@@ -6,6 +6,10 @@ import { ZodError } from 'zod';
 import { CommonModule } from '@angular/common';
 import { RegisterForm } from '../../components/register-form/register-form';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +17,10 @@ import { Router } from '@angular/router';
   templateUrl: './register.html',
 })
 export class Register {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private http: UserService,
+  ) {}
 
   errors: string[] = [];
 
@@ -23,13 +30,20 @@ export class Register {
     try {
       const parsed = userSchema.parse(data);
 
-      await api.post('/auth/registrar', parsed);
+      localStorage.removeItem('auth');
+
+      await firstValueFrom(this.http.register(parsed));
+
       this.router.navigate(['/login']);
     } catch (err) {
       if (err instanceof ZodError) {
-        console.log('ERRO AQUI', err);
-
         this.errors = getZodErrorMessages(err.format());
+        return;
+      }
+
+      if (err instanceof HttpErrorResponse) {
+        console.log('ERRO HTTP:', err.error);
+        this.errors = ['Erro ao registrar usuário'];
       }
     }
   }

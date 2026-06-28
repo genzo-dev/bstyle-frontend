@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, NgModule, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Link } from './components/link/link';
 import { AuthService } from './services/auth.service';

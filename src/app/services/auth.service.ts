@@ -1,11 +1,17 @@
 import { Injectable, NgZone, signal } from '@angular/core';
-import api from '../../../libs/axios-config';
 import { User } from '../types/user.type';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../enviroment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    private ngZone: NgZone,
+    private http: HttpClient,
+  ) {}
 
+  private baseUrl = environment.apiUrl;
   private _user = signal<User | null>(null);
   user = this._user.asReadonly();
 
@@ -20,10 +26,14 @@ export class AuthService {
     if (!token) return null;
 
     try {
-      const res = await api.get('/usuarios/perfil');
-      this.setUser(res.data);
-      return res.data;
-    } catch {
+      const res = await firstValueFrom(this.http.get<User>(`${this.baseUrl}/usuarios/perfil`));
+
+      console.log('USER PERFIL:', res);
+
+      this.setUser(res);
+      return res;
+    } catch (err) {
+      console.log('ERRO PERFIL:', err);
       this.logout();
       return null;
     }

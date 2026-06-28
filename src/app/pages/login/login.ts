@@ -7,6 +7,8 @@ import { ZodError } from 'zod';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +19,7 @@ export class Login {
   constructor(
     private router: Router,
     public auth: AuthService,
+    private http: UserService,
   ) {}
 
   errors: string[] = [];
@@ -28,11 +31,14 @@ export class Login {
       const parsed = loginSchema.parse(data);
 
       const token = btoa(`${parsed.login}:${parsed.senha}`);
-
       localStorage.setItem('auth', token);
 
+      console.log('FORM DATA:', data);
+      console.log('LOGIN OK');
+
       // Confirma usuário logado via requisição autenticada
-      const getUsers = await api.get('/usuarios/perfil');
+      // const getUsers = await api.get('/usuarios/perfil');
+      const getUsers = await firstValueFrom(this.http.getUsers());
       console.log('Usuários encontrados:', getUsers);
 
       await this.auth.loadUser();
