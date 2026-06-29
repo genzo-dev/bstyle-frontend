@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   isLogged() {
-    return this.user() !== null;
+    return !!localStorage.getItem('auth');
   }
 
   logout() {
