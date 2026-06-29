@@ -1,11 +1,12 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { SpinLoader } from '../spin-loader/spin-loader';
 
 @Component({
   selector: 'app-button',
   standalone: true,
   templateUrl: './button.html',
-  imports: [NgClass],
+  imports: [NgClass, SpinLoader],
 })
 export class Button {
   @Input() variant: 'primary' | 'secondary' | 'danger' | 'ghost' = 'primary';
