@@ -45,5 +45,12 @@ export const userCreateSchema = userCreateBase
     return { login, nome, senha, telefone, cidade, estado, rua, numero, fotoPerfilUrl };
   });
 
-export type UserCreateSchema = z.infer<typeof userCreateSchema>;
+export const userUpdateSchema = userSchema.transform(
+  ({ nome, telefone, cidade, estado, rua, numero, fotoPerfilUrl }) => {
+    ({ nome, telefone, cidade, estado, rua, numero, fotoPerfilUrl });
+  },
+);
+
 export type UserSchema = z.infer<typeof userSchema>;
+export type UserCreateSchema = z.infer<typeof userCreateSchema>;
+export type UserUpdateSchema = z.infer<typeof userUpdateSchema>;
