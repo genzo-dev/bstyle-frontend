@@ -1,0 +1,16 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <app-input label="Nome:" placeholder="{{ auth.user()?.nome }}" controlName="nome" />
+  <app-input label="Telefone:" placeholder="{{ auth.user()?.telefone }}" controlName="telefone" />
+  <app-input label="Cidade:" placeholder="{{ auth.user()?.cidade }}" controlName="cidade" />
+  <app-input label="Estado:" placeholder="{{ auth.user()?.estado }}" controlName="estado" />
+  <app-input label="Rua:" placeholder="{{ auth.user()?.rua }}" controlName="rua" />
+  <app-input label="Número:" placeholder="{{ auth.user()?.numero }}" controlName="numero" />
+  <app-input
+    label="Foto de perfil:"
+    placeholder="{{ auth.user()?.fotoPerfilUrl }}"
+    controlName="fotoPerfilUrl"
+  />
+  <div class="col-span-1 sm:col-span-2">
+    <app-button type="submit" [loading]="isLoading"> Atualizar dados </app-button>
+  </div>
+</form>

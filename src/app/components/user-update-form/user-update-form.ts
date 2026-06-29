@@ -1,27 +1,27 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Button } from '../button/button';
 import { asyncDelay } from '../../utils/async-delay';
+import { Button } from '../button/button';
 import { InputComponent } from '../input/input';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-register-form',
-  standalone: true,
+  selector: 'app-user-update-form',
   imports: [ReactiveFormsModule, Button, InputComponent],
-  templateUrl: './register-form.html',
+  templateUrl: './user-update-form.html',
 })
-export class RegisterForm {
+export class UserUpdateForm {
   @Input() initialData: any;
   @Output() onSubmit = new EventEmitter<any>();
 
   isLoading = false;
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    public auth: AuthService,
+  ) {
     this.form = this.fb.group({
-      login: [''],
-      senha: [''],
-      senha2: [''],
       nome: [''],
       telefone: [''],
       cidade: [''],
@@ -32,9 +32,19 @@ export class RegisterForm {
     });
   }
 
-  ngOnInit() {
-    if (this.initialData) {
-      this.form.patchValue(this.initialData);
+  ngOnChanges() {
+    const user = this.auth.user();
+
+    if (user) {
+      this.form.patchValue({
+        nome: user.nome,
+        telefone: user.telefone,
+        cidade: user.cidade,
+        estado: user.estado,
+        rua: user.rua,
+        numero: user.numero,
+        fotoPerfilUrl: user.fotoPerfilUrl,
+      });
     }
   }
 

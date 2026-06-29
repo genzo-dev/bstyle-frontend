@@ -7,8 +7,9 @@
 
       @if (auth.isLogged()) {
         <div class="flex justify-center items-center gap-4 sm:gap-8">
-          <span>{{ auth.user()?.nome }}</span>
-          <app-button variant="danger" (clicked)="auth.logout()">Sair</app-button>
+          <app-button (clicked)="toggleMenu(); $event.stopPropagation()" class="hover:underline">
+            {{ auth.user()?.nome }}
+          </app-button>
         </div>
       } @else {
         <div class="flex gap-2 sm:gap-8">
@@ -26,6 +27,25 @@
   </header>
 
   <main class="flex-1 px-8">
+    @if (openProfileMenu()) {
+      <div
+        class="absolute flex flex-col bg-white border border-black/30 rounded-lg shadow-lg mt-4 right-12 py-2"
+        #menuContainer
+      >
+        <app-link
+          [to]="['/user', createSlug(auth.user()?.nome ?? '')]"
+          class="hover:bg-gray-300 text-left transition cursor-pointer w-full decoration-0 px-4 py-1.5"
+          >Meu perfil</app-link
+        >
+        <button
+          (click)="auth.logout(); closeMenu()"
+          class="hover:bg-red-300 text-start transition cursor-pointer decoration-0 px-4 py-1.5"
+        >
+          Sair
+        </button>
+      </div>
+    }
+
     <router-outlet></router-outlet>
   </main>
 

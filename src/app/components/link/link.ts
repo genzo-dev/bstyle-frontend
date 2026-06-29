@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -6,9 +5,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-link',
   standalone: true,
   templateUrl: './link.html',
-  imports: [RouterLink, NgClass],
+  imports: [RouterLink],
 })
 export class Link {
-  @Input() to: string = '';
-  @Input() class: string = '';
+  @Input() to: string | any[] = '';
 }
