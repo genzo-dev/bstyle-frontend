@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { userSchema } from '../../schemas/user/user.schema';
+import { userCreateSchema, userSchema } from '../../schemas/user/user.schema';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
 import { CommonModule } from '@angular/common';
 import { RegisterForm } from '../../components/register-form/register-form';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -27,7 +26,7 @@ export class Register {
     this.errors = [];
 
     try {
-      const parsed = userSchema.parse(data);
+      const parsed = userCreateSchema.parse(data);
 
       localStorage.removeItem('auth');
 

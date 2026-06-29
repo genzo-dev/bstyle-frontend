@@ -21,6 +21,7 @@ export class RegisterForm {
     this.form = this.fb.group({
       login: [''],
       senha: [''],
+      senha2: [''],
       nome: [''],
       telefone: [''],
       cidade: [''],
