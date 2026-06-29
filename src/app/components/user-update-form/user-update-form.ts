@@ -32,9 +32,19 @@ export class UserUpdateForm {
     });
   }
 
-  ngOnInit() {
-    if (this.initialData) {
-      this.form.patchValue(this.initialData);
+  ngOnChanges() {
+    const user = this.auth.user();
+
+    if (user) {
+      this.form.patchValue({
+        nome: user.nome,
+        telefone: user.telefone,
+        cidade: user.cidade,
+        estado: user.estado,
+        rua: user.rua,
+        numero: user.numero,
+        fotoPerfilUrl: user.fotoPerfilUrl,
+      });
     }
   }
 

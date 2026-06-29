@@ -45,11 +45,19 @@ export const userCreateSchema = userCreateBase
     return { login, nome, senha, telefone, cidade, estado, rua, numero, fotoPerfilUrl };
   });
 
-export const userUpdateSchema = userSchema.transform(
-  ({ nome, telefone, cidade, estado, rua, numero, fotoPerfilUrl }) => {
-    ({ nome, telefone, cidade, estado, rua, numero, fotoPerfilUrl });
-  },
-);
+export const userUpdateSchema = z.object({
+  nome: z
+    .string()
+    .min(3, { message: 'O nome deve ter pelo menos 3 caracteres' })
+    .or(z.literal(''))
+    .optional(),
+  telefone: z.string().optional(),
+  cidade: z.string().optional(),
+  estado: z.string().optional(),
+  rua: z.string().optional(),
+  numero: z.string().optional(),
+  fotoPerfilUrl: z.string().url('URL inválida').or(z.literal('')).optional(),
+});
 
 export type UserSchema = z.infer<typeof userSchema>;
 export type UserCreateSchema = z.infer<typeof userCreateSchema>;
