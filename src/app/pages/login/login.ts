@@ -32,13 +32,14 @@ export class Login {
       const token = btoa(`${parsed.login}:${parsed.senha}`);
       localStorage.setItem('auth', token);
 
-      // Confirma usuário logado via requisição autenticada
       const getUsers = await firstValueFrom(this.http.getUsers());
       console.log('Usuários encontrados:', getUsers);
 
       await this.auth.loadUser();
 
-      this.router.navigate(['/']);
+      const ok = await this.router.navigate(['/']);
+
+      console.log("navigate:", ok);
     } catch (err) {
       if (err instanceof ZodError) {
         this.errors = getZodErrorMessages(err.format());

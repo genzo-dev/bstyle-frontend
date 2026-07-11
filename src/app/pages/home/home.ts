@@ -1,0 +1,109 @@
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { NgClass, CurrencyPipe } from '@angular/common';
+
+@Component({
+  selector: 'app-home',
+  standalone: true,
+  imports: [NgClass, CurrencyPipe],
+  templateUrl: './home.html',
+  styleUrls: ['./home.css']
+})
+export class HomeComponent implements OnInit {
+
+  produtos: any[] = [];
+  loading = true;
+  filtroSelecionado: string | number | null = null;
+
+  tipos = [
+    { id: 1, nome: 'Roupas' },
+    { id: 2, nome: 'Calçados' },
+    { id: 3, nome: 'Acessórios' }
+  ];
+
+  private readonly API_URL = 'http://localhost:8080';
+
+  constructor(
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.carregarTodosProdutos();
+  }
+
+  carregarTodosProdutos(): void {
+    this.loading = true;
+    this.filtroSelecionado = null;
+
+    this.http.get<any[]>(`${this.API_URL}/produtos`).subscribe({
+      next: (dados) => {
+        console.log("Recebi produtos", dados);
+
+        this.produtos = dados.map(produto => ({
+          ...produto,
+          urlCompletaFoto: produto.fotos
+            ? `${this.API_URL}/uploads/${produto.fotos}`
+            : 'assets/placeholder.jpg'
+        }));
+
+        this.loading = false;
+
+        this.cdr.detectChanges();
+
+        console.log("Produtos:", this.produtos.length);
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  filtrarPorTipo(tipoId: number): void {
+    this.loading = true;
+    this.filtroSelecionado = tipoId;
+
+    this.http.get<any[]>(`${this.API_URL}/produtos/tipo/${tipoId}`).subscribe({
+      next: (dados) => {
+        this.produtos = dados;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  filtrarDoacoes(): void {
+    this.loading = true;
+    this.filtroSelecionado = 'doacoes';
+
+    this.http.get<any[]>(`${this.API_URL}/produtos/doacoes`).subscribe({
+      next: (dados) => {
+        this.produtos = dados;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  verContato(produto: any): void {
+    alert(`Entre em contato com ${produto.vendedorNome}\n📞 ${produto.vendedorTelefone}`);
+  }
+
+  getUrlImagem(fotoNome: string): string {
+    return fotoNome
+      ? `${this.API_URL}/uploads/${fotoNome}`
+      : 'assets/placeholder.jpg';
+  }
+}
