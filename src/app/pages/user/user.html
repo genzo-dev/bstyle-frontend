@@ -1,16 +1,98 @@
-<div class="flex items-center justify-center min-h-[80vh] py-12 md:py-0">
-  <div class="w-full max-w-3xl bg-white border border-black/30 shadow-lg rounded p-6">
-    <h2 class="text-2xl font-bold mb-6 text-center">Perfil de {{ auth.user()?.nome }}</h2>
-
-    <app-user-update-form
-      [initialData]="auth.user()"
-      (onSubmit)="handleSubmit($event)"
-    ></app-user-update-form>
-
-    @if (errors.length > 0) {
-      <div class="text-red-500 mt-4">
-        {{ errors[0] }}
+<div class="flex items-center justify-center min-h-[80vh] py-12 md:py-0 font-sans">
+  <div class="w-full max-w-3xl bg-white border border-black/30 shadow-lg rounded-xl p-8">
+    
+    @if (!editando) {
+      <div class="flex flex-col items-center mb-6">
+        <div class="w-24 h-24 rounded-full bg-gray-200 border-2 border-black-500 overflow-hidden mb-3 flex items-center justify-center">
+          @if (auth.user()?.fotoPerfilUrl) {
+            <img [src]="auth.user()?.fotoPerfilUrl" alt="Foto de Perfil" class="w-full h-full object-cover">
+          } @else {
+            <span class="text-3xl">👤</span>
+          }
+        </div>
+        <h2 class="text-3xl font-bold text-gray-900">Meu Perfil</h2>
+        <p class="text-gray-500 text-sm">Gerencie suas informações de contato e endereço</p>
       </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-b border-gray-100 py-6 mb-6">
+        
+        <div class="space-y-3 md:border-r md:border-gray-100 md:pr-4">
+          <h3 class="text-black-600 font-bold text-sm uppercase tracking-wider mb-2">Dados Pessoais</h3>
+          
+          <div class="flex flex-col">
+            <span class="text-xs text-gray-400 font-medium">Nome completo</span>
+            <span class="text-gray-800 font-semibold">{{ auth.user()?.nome }}</span>
+          </div>
+          
+          <div class="flex flex-col">
+            <span class="text-xs text-gray-400 font-medium">Nome de Usuário (Login)</span>
+            <span class="text-gray-800 font-semibold">@{{ auth.user()?.login }}</span>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-xs text-gray-400 font-medium">Telefone / WhatsApp</span>
+            <span class="text-gray-800 font-semibold">{{ auth.user()?.telefone || 'Não informado' }}</span>
+          </div>
+        </div>
+
+        <div class="space-y-3 md:pl-4">
+          <h3 class="text-black-600 font-bold text-sm uppercase tracking-wider mb-2">Endereço</h3>
+          
+          <div class="flex flex-col">
+            <span class="text-xs text-gray-400 font-medium">Cidade / Estado</span>
+            <span class="text-gray-800 font-semibold">
+              {{ auth.user()?.cidade || 'Não informada' }} / {{ auth.user()?.estado || 'UF' }}
+            </span>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-xs text-gray-400 font-medium">Logradouro (Rua)</span>
+            <span class="text-gray-800 font-semibold">{{ auth.user()?.rua || 'Não informada' }}</span>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-xs text-gray-400 font-medium">Número</span>
+            <span class="text-gray-800 font-semibold">{{ auth.user()?.numero || 'S/N' }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex justify-center gap-4">
+        <button 
+          (click)="alternarEdicao()"
+          class="w-48 bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2.5 rounded-lg shadow transition-colors duration-150 text-center">
+          Editar Perfil
+        </button>
+        
+        <button 
+          [routerLink]="['/meus-produtos']"
+          class="w-48 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 rounded-lg shadow transition-colors duration-150 flex items-center justify-center gap-2">
+          Meus Produtos
+        </button>
+      </div>
+
+    } @else {
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Atualizar Perfil</h2>
+        <button 
+          (click)="alternarEdicao()"
+          class="text-sm font-medium text-gray-500 hover:text-gray-700 underline decoration-2">
+          Voltar para o perfil
+        </button>
+      </div>
+
+      <app-user-update-form
+        [initialData]="auth.user()"
+        (onSubmit)="handleSubmit($event)"
+      ></app-user-update-form>
+
+      @if (errors.length > 0) {
+        <div class="text-red-500 mt-4 text-sm font-medium bg-red-50 border border-red-200 p-3 rounded-lg">
+          {{ errors[0] }}
+        </div>
+      }
     }
+
   </div>
 </div>

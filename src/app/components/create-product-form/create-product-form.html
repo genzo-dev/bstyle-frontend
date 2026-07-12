@@ -1,0 +1,50 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  <app-input label="Nome:" placeholder="Digite o nome do produto" controlName="nome" />
+
+  <app-input
+    label="Descrição:"
+    placeholder="Digite a descrição do produto"
+    controlName="descricao"
+  />
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <app-input label="Preço (R$):" placeholder="0 para doação" controlName="preco" />
+
+    <app-input
+      label="Estoque:"
+      placeholder="Quantidade disponível"
+      controlName="quantidade"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium">Tipo:</label>
+    <select
+      formControlName="tipoId"
+      class="border rounded px-3 py-2 outline-none transition border-gray-300"
+    >
+      <option [value]="1">Roupa</option>
+      <option [value]="2">Calçado</option>
+      <option [value]="3">Acessório</option>
+    </select>
+  </div>
+
+  <app-input label="Cores:" placeholder="Ex: 1,2,3" controlName="coresIds" />
+
+  <app-input label="Tags:" placeholder="Ex: 1,2,3" controlName="tagsIds" />
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium">Fotos:</label>
+    <input
+      type="file"
+      multiple
+      (change)="onFilesSelected($event)"
+      accept="image/*"
+      class="border rounded px-3 py-2 border-gray-300"
+    />
+  </div>
+
+  <div>
+    <app-button type="submit" [loading]="loading"> Cadastrar produto </app-button>
+  </div>
+</form>

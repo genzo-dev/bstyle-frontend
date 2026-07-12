@@ -1,16 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgClass, CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { WhatsappService } from '../../services/whatsapp.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgClass, CurrencyPipe],
+  imports: [NgClass, CurrencyPipe, RouterLink],
   templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  styleUrls: ['./home.css'],
 })
 export class HomeComponent implements OnInit {
-
   produtos: any[] = [];
   loading = true;
   filtroSelecionado: string | number | null = null;
@@ -18,14 +19,16 @@ export class HomeComponent implements OnInit {
   tipos = [
     { id: 1, nome: 'Roupas' },
     { id: 2, nome: 'Calçados' },
-    { id: 3, nome: 'Acessórios' }
+    { id: 3, nome: 'Acessórios' },
   ];
 
   private readonly API_URL = 'http://localhost:8080';
 
   constructor(
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private whatsappService: WhatsappService,
+
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -38,26 +41,26 @@ export class HomeComponent implements OnInit {
 
     this.http.get<any[]>(`${this.API_URL}/produtos`).subscribe({
       next: (dados) => {
-        console.log("Recebi produtos", dados);
+        console.log('Recebi produtos', dados);
 
-        this.produtos = dados.map(produto => ({
+        this.produtos = dados.map((produto) => ({
           ...produto,
           urlCompletaFoto: produto.fotos
             ? `${this.API_URL}/uploads/${produto.fotos}`
-            : 'assets/placeholder.jpg'
+            : 'assets/placeholder.jpg',
         }));
 
         this.loading = false;
 
         this.cdr.detectChanges();
 
-        console.log("Produtos:", this.produtos.length);
+        console.log('Produtos:', this.produtos.length);
       },
       error: (err) => {
         console.error(err);
         this.loading = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -75,7 +78,7 @@ export class HomeComponent implements OnInit {
         console.error(err);
         this.loading = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -93,17 +96,21 @@ export class HomeComponent implements OnInit {
         console.error(err);
         this.loading = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
   verContato(produto: any): void {
-    alert(`Entre em contato com ${produto.vendedorNome}\n📞 ${produto.vendedorTelefone}`);
+    if (produto) {
+      this.whatsappService.abrirConversa(produto.vendedorTelefone, produto.nome);
+    }
   }
 
+  // verContato(produto: any): void {
+  //   alert(`Entre em contato com ${produto.vendedorNome}\n📞 ${produto.vendedorTelefone}`);
+  // }
+
   getUrlImagem(fotoNome: string): string {
-    return fotoNome
-      ? `${this.API_URL}/uploads/${fotoNome}`
-      : 'assets/placeholder.jpg';
+    return fotoNome ? `${this.API_URL}/uploads/${fotoNome}` : 'assets/placeholder.jpg';
   }
 }

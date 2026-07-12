@@ -7,10 +7,12 @@ import { UserService } from '../../services/user.service';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonModule } from '@angular/common'; // Garanta a importação para diretivas e classes estruturais se necessário
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user',
-  imports: [UserUpdateForm],
+  imports: [UserUpdateForm, CommonModule, RouterLink],
   templateUrl: './user.html',
 })
 export class User {
@@ -20,6 +22,12 @@ export class User {
   ) {}
 
   errors: string[] = [];
+  editando: boolean = false;
+
+  alternarEdicao(): void {
+    this.editando = !this.editando;
+    this.errors = [];
+  }
 
   async handleSubmit(data: any) {
     this.errors = [];
@@ -28,8 +36,9 @@ export class User {
       const parsed = userUpdateSchema.parse(data);
 
       await firstValueFrom(this.user.updateUser(parsed));
-
       await this.auth.loadUser();
+      
+      this.editando = false;
     } catch (err) {
       if (err instanceof ZodError) {
         this.errors = getZodErrorMessages(err.format());
@@ -38,7 +47,7 @@ export class User {
 
       if (err instanceof HttpErrorResponse) {
         console.log('ERRO HTTP:', err.error);
-        this.errors = ['Erro ao registrar usuário'];
+        this.errors = ['Erro ao atualizar usuário'];
       }
     }
   }
