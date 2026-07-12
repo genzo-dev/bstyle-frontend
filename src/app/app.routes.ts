@@ -5,6 +5,7 @@ import { User } from './pages/user/user';
 import { HomeComponent } from './pages/home/home';
 import { MyProducts } from './pages/my-products/my-products';
 import { EditProduct } from './pages/edit-product/edit-product';
+import { CreateProduct } from './pages/create-product/create-product';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -29,6 +30,11 @@ export const routes: Routes = [
   {
     path: 'meus-produtos',
     component: MyProducts,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'produtos/cadastrar',
+    component: CreateProduct,
     canActivate: [authGuard],
   },
   {

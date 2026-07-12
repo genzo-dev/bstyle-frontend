@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private apiUrl = 'http://localhost:8080/produtos';
@@ -16,6 +16,10 @@ export class ProductService {
 
   getProductById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  registerProduct(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, formData);
   }
 
   updateProduct(id: number, formData: FormData): Observable<any> {
