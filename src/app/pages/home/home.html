@@ -1,0 +1,210 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
+
+  <header class="bg-black rounded-2xl p-8 sm:p-12 text-center mb-10 shadow-lg">
+    <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
+      CF Style
+    </h1>
+
+    <p class="text-gray-300 text-lg sm:text-xl max-w-2xl mx-auto">
+      Sua comunidade de brechó. Encontre roupas, calçados e acessórios incríveis ou doe o que não usa mais!
+    </p>
+  </header>
+
+  <section class="mb-10">
+    <h3 class="text-black font-bold text-lg mb-4">
+      Filtrar por Categoria
+    </h3>
+
+    <div class="flex flex-wrap gap-3">
+
+      <button
+        (click)="carregarTodosProdutos()"
+        [ngClass]="
+          filtroSelecionado === null
+            ? 'bg-black text-white border-black'
+            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-black'
+        "
+        class="px-5 py-2 rounded-full border-2 font-medium text-sm transition-all duration-200">
+
+        Todos os Itens
+      </button>
+
+      @for (tipo of tipos; track tipo.id) {
+
+      <button
+        (click)="filtrarPorTipo(tipo.id)"
+        [ngClass]="
+          filtroSelecionado === tipo.id
+            ? 'bg-black text-white border-black'
+            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-black'
+        "
+        class="px-5 py-2 rounded-full border-2 font-medium text-sm transition-all duration-200">
+
+        {{ tipo.nome }}
+
+      </button>
+
+      }
+
+      <button
+        (click)="filtrarDoacoes()"
+        [ngClass]="
+          filtroSelecionado === 'doacoes'
+            ? 'bg-green-600 text-white border-green-600'
+            : 'bg-white text-green-700 border-green-600 hover:bg-green-50'
+        "
+        class="px-5 py-2 rounded-full border-2 font-bold text-sm transition-all duration-200">
+
+        Doações
+
+      </button>
+
+    </div>
+  </section>
+
+  @if (loading) {
+
+  <div class="flex flex-col items-center justify-center py-20">
+
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black mb-4"></div>
+
+    <p class="text-gray-500 font-medium">
+      Buscando as melhores peças para você...
+    </p>
+
+  </div>
+
+  }
+
+  @if (!loading) {
+
+  <main>
+
+    <div class="flex justify-between items-center mb-6">
+
+      <h2 class="text-2xl font-bold text-gray-900">
+
+        {{ filtroSelecionado === 'doacoes'
+        ? 'Doações Disponíveis'
+        : 'Produtos em Destaque' }}
+
+      </h2>
+
+      <span class="text-sm bg-black text-white px-3 py-1 rounded-md font-medium">
+
+        {{ produtos.length }} encontrado(s)
+
+      </span>
+
+    </div>
+
+    @if (produtos.length === 0) {
+
+    <div class="text-center py-16 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+
+      <p class="text-gray-500 text-lg">
+        Nenhum produto encontrado para esta categoria no momento.
+      </p>
+
+    </div>
+
+    }
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+      @for (produto of produtos; track produto.id) {
+
+      <div
+        class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+
+        <div class="relative w-full h-56 bg-gray-100">
+
+          <img
+            [src]="getUrlImagem(produto.fotos)"
+            [alt]="produto.nome"
+            class="w-full h-full object-cover">
+
+          <span
+            [ngClass]="produto.preco === 0 ? 'bg-green-600' : 'bg-pink-600'"
+            class="absolute bottom-3 right-3 text-white text-xs font-bold px-2.5 py-1.5 rounded-md shadow-md">
+
+            {{ produto.preco === 0 ? 'DOAÇÃO' : (produto.preco | currency:'BRL') }}
+
+          </span>
+
+        </div>
+
+        <div class="p-4 flex-1 flex flex-col justify-between">
+
+          <div>
+
+            <h4 class="text-gray-900 font-bold text-lg mb-1 truncate">
+              {{ produto.nome }}
+            </h4>
+
+            <p class="text-gray-600 text-sm mb-3 line-clamp-2 min-h-[40px]">
+              {{ produto.descricao }}
+            </p>
+
+            <div class="flex flex-wrap gap-1 mb-4">
+
+              @for (tagName of produto.tagsNomes; track $index) {
+
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">
+
+                #{{ tagName }}
+
+              </span>
+
+              }
+
+            </div>
+
+          </div>
+
+          <div class="border-t border-gray-100 pt-3 mt-auto">
+
+            <div class="text-xs text-gray-500 flex flex-col gap-1">
+
+              <span class="truncate">
+                👤 Vendedor:
+                <strong class="text-gray-800">
+                  {{ produto.vendedorNome }}
+                </strong>
+              </span>
+
+              <span>
+                📍 Cidade:
+                <span class="text-gray-800">
+                  {{ produto.vendedorCidade }}
+                </span>
+              </span>
+
+            </div>
+
+            <button
+              (click)="verContato(produto)"
+              [ngClass]="produto.preco === 0
+                ? 'bg-black hover:bg-gray-900 focus:ring-gray-500'
+                : 'bg-black hover:bg-gray-900 focus:ring-gray-500'"
+              class="w-full mt-4 text-white font-semibold text-sm py-2 px-4 rounded-lg shadow transition-all duration-200 focus:outline-none focus:ring-4">
+
+              Tenho Interesse
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      }
+
+    </div>
+
+  </main>
+
+  }
+
+</div>
