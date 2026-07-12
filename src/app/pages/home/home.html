@@ -8,47 +8,82 @@
     </p>
   </header>
 
+  <section class="lg:hidden mb-8">
+    <div class="flex gap-2 max-w-xl mx-auto">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="realizarBusca()"
+        placeholder="Buscar produtos..."
+        class="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-full focus:outline-none focus:border-black text-sm"
+      />
+      <button
+        (click)="realizarBusca()"
+        class="px-6 py-2.5 bg-black text-white rounded-full font-medium text-sm hover:bg-gray-900 transition-all duration-200"
+      >
+        Buscar
+      </button>
+    </div>
+  </section>
+
   <section class="mb-10">
     <h3 class="text-black font-bold text-lg mb-4">Filtrar por Categoria</h3>
-
-    <div class="flex flex-wrap gap-3">
-      <button
-        (click)="carregarTodosProdutos()"
-        [ngClass]="
-          filtroSelecionado === null
-            ? 'bg-black text-white border-black'
-            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-black'
-        "
-        class="px-5 py-2 rounded-full border-2 font-medium text-sm transition-all duration-200"
-      >
-        Todos os Itens
-      </button>
-
-      @for (tipo of tipos; track tipo.id) {
+    <div class="flex justify-between items-center">
+      <div class="flex flex-wrap gap-3">
         <button
-          (click)="filtrarPorTipo(tipo.id)"
+          (click)="carregarTodosProdutos()"
           [ngClass]="
-            filtroSelecionado === tipo.id
+            filtroSelecionado === null
               ? 'bg-black text-white border-black'
               : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-black'
           "
           class="px-5 py-2 rounded-full border-2 font-medium text-sm transition-all duration-200"
         >
-          {{ tipo.nome }}
+          Todos os Itens
         </button>
-      }
 
-      <button
-        (click)="filtrarDoacoes()"
-        [ngClass]="
-          filtroSelecionado === 'doacoes'
-            ? 'bg-green-600 text-white border-green-600'
-            : 'bg-white text-green-700 border-green-600 hover:bg-green-50'
-        "
-        class="px-5 py-2 rounded-full border-2 font-bold text-sm transition-all duration-200"
-      >
-        Doações
-      </button>
+        @for (tipo of tipos; track tipo.id) {
+          <button
+            (click)="filtrarPorTipo(tipo.id)"
+            [ngClass]="
+              filtroSelecionado === tipo.id
+                ? 'bg-black text-white border-black'
+                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-black'
+            "
+            class="px-5 py-2 rounded-full border-2 font-medium text-sm transition-all duration-200"
+          >
+            {{ tipo.nome }}
+          </button>
+        }
+
+        <button
+          (click)="filtrarDoacoes()"
+          [ngClass]="
+            filtroSelecionado === 'doacoes'
+              ? 'bg-green-600 text-white border-green-600'
+              : 'bg-white text-green-700 border-green-600 hover:bg-green-50'
+          "
+          class="px-5 py-2 rounded-full border-2 font-bold text-sm transition-all duration-200"
+        >
+          Doações
+        </button>
+      </div>
+
+      <div class="gap-2 max-w-xl hidden lg:flex">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="realizarBusca()"
+          placeholder="Buscar produtos..."
+          class="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-full focus:outline-none focus:border-black text-sm"
+        />
+        <button
+          (click)="realizarBusca()"
+          class="px-6 py-2.5 bg-black text-white rounded-full font-medium text-sm hover:bg-gray-900 transition-all duration-200"
+        >
+          Buscar
+        </button>
+      </div>
     </div>
   </section>
 
