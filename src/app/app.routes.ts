@@ -7,12 +7,13 @@ import { MyProducts } from './pages/my-products/my-products';
 import { EditProduct } from './pages/edit-product/edit-product';
 import { CreateProduct } from './pages/create-product/create-product';
 import { authGuard } from './guards/auth.guard';
+import { ProductDetails } from './pages/product-details/product-details';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'register',
@@ -38,12 +39,16 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'produtos/:id',
+    component: ProductDetails,
+  },
+  {
     path: 'produtos/editar/:id',
     component: EditProduct,
     canActivate: [authGuard],
   },
   {
     path: '**',
-    redirectTo: ''
-  }
+    redirectTo: '',
+  },
 ];
