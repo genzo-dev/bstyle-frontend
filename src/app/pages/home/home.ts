@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgClass, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { WhatsappService } from '../../services/whatsapp.service';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private whatsappService: WhatsappService,
+
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -98,8 +101,14 @@ export class HomeComponent implements OnInit {
   }
 
   verContato(produto: any): void {
-    alert(`Entre em contato com ${produto.vendedorNome}\n📞 ${produto.vendedorTelefone}`);
+    if (produto) {
+      this.whatsappService.abrirConversa(produto.vendedorTelefone, produto.nome);
+    }
   }
+
+  // verContato(produto: any): void {
+  //   alert(`Entre em contato com ${produto.vendedorNome}\n📞 ${produto.vendedorTelefone}`);
+  // }
 
   getUrlImagem(fotoNome: string): string {
     return fotoNome ? `${this.API_URL}/uploads/${fotoNome}` : 'assets/placeholder.jpg';

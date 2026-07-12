@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgClass, CurrencyPipe } from '@angular/common';
 import { ProductService } from '../../services/product.service';
+import { WhatsappService } from '../../services/whatsapp.service';
 
 @Component({
   selector: 'app-product-details',
@@ -17,6 +18,7 @@ export class ProductDetails implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
+    private whatsappService: WhatsappService,
     private cd: ChangeDetectorRef,
   ) {}
 
@@ -36,9 +38,7 @@ export class ProductDetails implements OnInit {
 
   verContato(): void {
     if (this.product) {
-      alert(
-        `Entre em contato com ${this.product.vendedorNome}\n📞 ${this.product.vendedorTelefone}`,
-      );
+      this.whatsappService.abrirConversa(this.product.vendedorTelefone, this.product.nome);
     }
   }
 }
