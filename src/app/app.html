@@ -2,7 +2,7 @@
   <header>
     <nav class="flex items-center justify-between px-8 bg-black py-4 text-white">
       <div>
-        <a to="/" class="text-xl sm:text-3xl">BStyle</a>
+        <a href="/" class="text-xl sm:text-3xl cursor-pointer">BStyle</a>
       </div>
 
       @if (auth.isLogged()) {
@@ -29,7 +29,7 @@
   <main class="flex-1 px-8">
     @if (openProfileMenu()) {
       <div
-        class="absolute flex flex-col bg-white border border-black/30 rounded-lg shadow-lg mt-4 right-12 py-2"
+        class="absolute flex flex-col bg-white border border-black/30 rounded-lg shadow-lg mt-4 right-4 sm:right-12 py-2"
         #menuContainer
       >
         <app-link
@@ -53,20 +53,18 @@
     <div>
       <label class="font-bold mb-2">Mapa do site</label>
       <ul>
-        <ul>
-          <li>
-            <app-link to="/">Home</app-link>
-          </li>
-          <li>
-            <app-link to="/products">Produtos</app-link>
-          </li>
-          <li>
-            <app-link to="/categories">Categorias</app-link>
-          </li>
-          <li>
-            <app-link to="/profile">Perfil</app-link>
-          </li>
-        </ul>
+        <li>
+          <app-link to="/">Home</app-link>
+        </li>
+        <li>
+          <app-link to="/products">Produtos</app-link>
+        </li>
+        <li>
+          <app-link to="/categories">Categorias</app-link>
+        </li>
+        <li>
+          <app-link to="/profile">Perfil</app-link>
+        </li>
       </ul>
     </div>
 
