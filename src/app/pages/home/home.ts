@@ -2,12 +2,14 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgClass, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { WhatsappService } from '../../services/whatsapp.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgClass, CurrencyPipe, RouterLink],
+  imports: [NgClass, CurrencyPipe, RouterLink, FormsModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
@@ -15,6 +17,7 @@ export class HomeComponent implements OnInit {
   produtos: any[] = [];
   loading = true;
   filtroSelecionado: string | number | null = null;
+  searchTerm = '';
 
   tipos = [
     { id: 1, nome: 'Roupas' },
@@ -27,7 +30,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private whatsappService: WhatsappService,
-
+    private productService: ProductService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -38,11 +41,10 @@ export class HomeComponent implements OnInit {
   carregarTodosProdutos(): void {
     this.loading = true;
     this.filtroSelecionado = null;
+    this.searchTerm = '';
 
-    this.http.get<any[]>(`${this.API_URL}/produtos`).subscribe({
+    this.productService.getProductsBySearch().subscribe({
       next: (dados) => {
-        console.log('Recebi produtos', dados);
-
         this.produtos = dados.map((produto) => ({
           ...produto,
           urlCompletaFoto: produto.fotos
@@ -51,10 +53,7 @@ export class HomeComponent implements OnInit {
         }));
 
         this.loading = false;
-
         this.cdr.detectChanges();
-
-        console.log('Produtos:', this.produtos.length);
       },
       error: (err) => {
         console.error(err);
@@ -100,15 +99,35 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  realizarBusca(): void {
+    this.loading = true;
+    this.filtroSelecionado = null;
+
+    this.productService.getProductsBySearch(this.searchTerm).subscribe({
+      next: (dados) => {
+        this.produtos = dados.map((produto) => ({
+          ...produto,
+          urlCompletaFoto: produto.fotos
+            ? `${this.API_URL}/uploads/${produto.fotos}`
+            : 'assets/placeholder.jpg',
+        }));
+
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
   verContato(produto: any): void {
     if (produto) {
       this.whatsappService.abrirConversa(produto.vendedorTelefone, produto.nome);
     }
   }
-
-  // verContato(produto: any): void {
-  //   alert(`Entre em contato com ${produto.vendedorNome}\n📞 ${produto.vendedorTelefone}`);
-  // }
 
   getUrlImagem(fotoNome: string): string {
     return fotoNome ? `${this.API_URL}/uploads/${fotoNome}` : 'assets/placeholder.jpg';
