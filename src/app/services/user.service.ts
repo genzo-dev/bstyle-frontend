@@ -12,15 +12,15 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  register(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/auth/registrar`, data);
+  register(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/registrar`, formData);
   }
 
   getUsers(): Observable<any> {
     return this.http.get(`${this.baseUrl}/usuarios/perfil`);
   }
 
-  updateUser(data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/usuarios/perfil`, data);
+  updateUser(formData: FormData): Observable<any> {
+    return this.http.put(`${this.baseUrl}/usuarios/perfil`, formData);
   }
 }

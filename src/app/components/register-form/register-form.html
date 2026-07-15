@@ -14,7 +14,22 @@
   <app-input label="Estado:" placeholder="Estado" controlName="estado" />
   <app-input label="Rua:" placeholder="Rua" controlName="rua" />
   <app-input label="Número:" placeholder="Número" controlName="numero" />
-  <app-input label="Foto de perfil:" placeholder="URL da foto" controlName="fotoPerfilUrl" />
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-semibold text-gray-700">Foto de perfil:</label>
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center">
+        @if (imagePreview) {
+          <img [src]="imagePreview" alt="Preview" class="w-full h-full object-cover">
+        } @else {
+          <span class="text-2xl text-gray-400">👤</span>
+        }
+      </div>
+      <label class="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2 px-4 rounded-lg border border-gray-300 transition-colors">
+        Selecionar imagem
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden">
+      </label>
+    </div>
+  </div>
   <div class="col-span-1 sm:col-span-2">
     <app-button type="submit" [loading]="isLoading"> Cadastrar </app-button>
   </div>

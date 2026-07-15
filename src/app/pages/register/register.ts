@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { userCreateSchema, userSchema } from '../../schemas/user/user.schema';
+import { userCreateSchema } from '../../schemas/user/user.schema';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
 import { CommonModule } from '@angular/common';
@@ -26,11 +26,23 @@ export class Register {
     this.errors = [];
 
     try {
-      const parsed = userCreateSchema.parse(data);
+      const { fotoPerfil, ...formData } = data;
+      const parsed = userCreateSchema.parse(formData);
+
+      const formDataObj = new FormData();
+      formDataObj.append('login', parsed.login);
+      formDataObj.append('nome', parsed.nome);
+      formDataObj.append('senha', parsed.senha);
+      if (parsed.telefone) formDataObj.append('telefone', parsed.telefone);
+      if (parsed.cidade) formDataObj.append('cidade', parsed.cidade);
+      if (parsed.estado) formDataObj.append('estado', parsed.estado);
+      if (parsed.rua) formDataObj.append('rua', parsed.rua);
+      if (parsed.numero) formDataObj.append('numero', parsed.numero);
+      if (fotoPerfil) formDataObj.append('foto', fotoPerfil);
 
       localStorage.removeItem('auth');
 
-      await firstValueFrom(this.http.register(parsed));
+      await firstValueFrom(this.http.register(formDataObj));
 
       this.router.navigate(['/login']);
     } catch (err) {

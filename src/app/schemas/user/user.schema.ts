@@ -12,7 +12,6 @@ export const userSchema = z.object({
   estado: z.string().optional(),
   rua: z.string().optional(),
   numero: z.string().optional(),
-  fotoPerfilUrl: z.string().url('Insira uma URL válida').optional(),
 });
 
 export const userCreateBase = z.object({
@@ -28,7 +27,6 @@ export const userCreateBase = z.object({
   estado: z.string().optional(),
   rua: z.string().optional(),
   numero: z.string().optional(),
-  fotoPerfilUrl: z.string().url('Insira uma URL válida').optional(),
 });
 
 export const userCreateSchema = userCreateBase
@@ -41,8 +39,8 @@ export const userCreateSchema = userCreateBase
       message: 'As senhas não coincidem',
     },
   )
-  .transform(({ login, nome, senha, telefone, cidade, estado, rua, numero, fotoPerfilUrl }) => {
-    return { login, nome, senha, telefone, cidade, estado, rua, numero, fotoPerfilUrl };
+  .transform(({ login, nome, senha, telefone, cidade, estado, rua, numero }) => {
+    return { login, nome, senha, telefone, cidade, estado, rua, numero };
   });
 
 export const userUpdateSchema = z.object({
@@ -56,7 +54,6 @@ export const userUpdateSchema = z.object({
   estado: z.string().optional(),
   rua: z.string().optional(),
   numero: z.string().optional(),
-  fotoPerfilUrl: z.string().url('URL inválida').or(z.literal('')).optional(),
 });
 
 export type UserSchema = z.infer<typeof userSchema>;
