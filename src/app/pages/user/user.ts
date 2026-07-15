@@ -7,8 +7,9 @@ import { UserService } from '../../services/user.service';
 import { getZodErrorMessages } from '../../utils/get-zod-error-messages';
 import { ZodError } from 'zod';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // Garanta a importação para diretivas e classes estruturais se necessário
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../../../environment';
 
 @Component({
   selector: 'app-user',
@@ -24,6 +25,11 @@ export class User {
   errors: string[] = [];
   editando: boolean = false;
 
+  get urlFotoPerfil(): string {
+    const nomeArquivo = this.auth.user()?.fotoPerfilUrl;
+    return nomeArquivo ? `${environment.apiUrl}/uploads/${nomeArquivo}` : '';
+  }
+
   alternarEdicao(): void {
     this.editando = !this.editando;
     this.errors = [];
@@ -33,9 +39,19 @@ export class User {
     this.errors = [];
 
     try {
-      const parsed = userUpdateSchema.parse(data);
+      const { fotoPerfil, ...formValues } = data;
+      const parsed = userUpdateSchema.parse(formValues);
 
-      await firstValueFrom(this.user.updateUser(parsed));
+      const formData = new FormData();
+      if (parsed.nome) formData.append('nome', parsed.nome);
+      if (parsed.telefone) formData.append('telefone', parsed.telefone);
+      if (parsed.cidade) formData.append('cidade', parsed.cidade);
+      if (parsed.estado) formData.append('estado', parsed.estado);
+      if (parsed.rua) formData.append('rua', parsed.rua);
+      if (parsed.numero) formData.append('numero', parsed.numero);
+      if (fotoPerfil) formData.append('foto', fotoPerfil);
+
+      await firstValueFrom(this.user.updateUser(formData));
       await this.auth.loadUser();
       
       this.editando = false;

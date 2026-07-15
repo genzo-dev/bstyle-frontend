@@ -5,7 +5,7 @@
       <div class="flex flex-col items-center mb-6">
         <div class="w-24 h-24 rounded-full bg-gray-200 border-2 border-black-500 overflow-hidden mb-3 flex items-center justify-center">
           @if (auth.user()?.fotoPerfilUrl) {
-            <img [src]="auth.user()?.fotoPerfilUrl" alt="Foto de Perfil" class="w-full h-full object-cover">
+            <img [src]="urlFotoPerfil" alt="Foto de Perfil" class="w-full h-full object-cover">
           } @else {
             <span class="text-3xl">👤</span>
           }

@@ -17,6 +17,9 @@ export class UserUpdateForm {
   isLoading = false;
   form: FormGroup;
 
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     public auth: AuthService,
@@ -28,7 +31,6 @@ export class UserUpdateForm {
       estado: [''],
       rua: [''],
       numero: [''],
-      fotoPerfilUrl: [''],
     });
   }
 
@@ -43,8 +45,23 @@ export class UserUpdateForm {
         estado: user.estado,
         rua: user.rua,
         numero: user.numero,
-        fotoPerfilUrl: user.fotoPerfilUrl,
       });
+      if (user.fotoPerfilUrl) {
+        this.imagePreview = user.fotoPerfilUrl;
+      }
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
@@ -62,7 +79,10 @@ export class UserUpdateForm {
     try {
       await asyncDelay(2000);
       this.form.disabled;
-      this.onSubmit.emit(this.form.value);
+      this.onSubmit.emit({
+        ...this.form.value,
+        fotoPerfil: this.selectedFile,
+      });
     } finally {
       this.isLoading = false;
       this.form.enable;

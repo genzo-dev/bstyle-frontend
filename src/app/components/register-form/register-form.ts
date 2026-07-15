@@ -17,6 +17,9 @@ export class RegisterForm {
   isLoading = false;
   form: FormGroup;
 
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
+
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       login: [''],
@@ -28,13 +31,25 @@ export class RegisterForm {
       estado: [''],
       rua: [''],
       numero: [''],
-      fotoPerfilUrl: [''],
     });
   }
 
   ngOnInit() {
     if (this.initialData) {
       this.form.patchValue(this.initialData);
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
@@ -52,7 +67,10 @@ export class RegisterForm {
     try {
       await asyncDelay(2000);
       this.form.disabled;
-      this.onSubmit.emit(this.form.value);
+      this.onSubmit.emit({
+        ...this.form.value,
+        fotoPerfil: this.selectedFile,
+      });
     } finally {
       this.isLoading = false;
       this.form.enable;
