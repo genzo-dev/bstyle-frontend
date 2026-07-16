@@ -46,11 +46,15 @@ export class CreateProduct {
       formData.append('quantidade', String(parsed.quantidade));
       formData.append('tipoId', String(parsed.tipoId));
 
-      if (parsed.coresIds) {
-        formData.append('coresIds', parsed.coresIds);
+      if (parsed.coresIds && parsed.coresIds.length > 0) {
+        parsed.coresIds.forEach((id) => {
+          formData.append('coresIds', id.toString());
+        });
       }
-      if (parsed.tagsIds) {
-        formData.append('tagsIds', parsed.tagsIds);
+      if (parsed.tagsIds && parsed.tagsIds.length > 0) {
+        parsed.tagsIds.forEach((id) => {
+          formData.append('tagsIds', id.toString());
+        });
       }
 
       const fotos: File[] = data.fotos ?? [];

@@ -18,20 +18,8 @@ export const productCreateSchema = z.object({
   tipoId: z
     .number({ message: 'Selecione um tipo de produto' })
     .min(1, 'Selecione um tipo de produto'),
-  coresIds: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || /^(\d+,)*\d+$/.test(val),
-      'Formato inválido. Use números separados por vírgula (ex: 1,2,3)',
-    ),
-  tagsIds: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || /^(\d+,)*\d+$/.test(val),
-      'Formato inválido. Use números separados por vírgula (ex: 1,2,3)',
-    ),
+  coresIds: z.array(z.number()).optional(),
+  tagsIds: z.array(z.number()).optional(),
 });
 
 export type ProductCreateSchema = z.infer<typeof productCreateSchema>;

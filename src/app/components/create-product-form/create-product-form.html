@@ -29,9 +29,9 @@
     </select>
   </div>
 
-  <app-input label="Cores:" placeholder="Ex: 1,2,3" controlName="coresIds" />
+  <app-multi-select label="Cores:" controlName="coresIds" [options]="cores" />
 
-  <app-input label="Tags:" placeholder="Ex: 1,2,3" controlName="tagsIds" />
+  <app-multi-select label="Tags:" controlName="tagsIds" [options]="tags" />
 
   <div class="flex flex-col gap-1">
     <label class="text-sm font-medium">Fotos:</label>

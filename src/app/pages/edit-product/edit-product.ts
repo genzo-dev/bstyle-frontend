@@ -3,12 +3,16 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
+import { ColorService } from '../../services/color.service';
+import { TagService } from '../../services/tag.service';
+import { Color, Tag } from '../../types/product.type';
+import { MultiSelectComponent } from '../../components/multi-select/multi-select';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-edit-product',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, MultiSelectComponent],
   templateUrl: './edit-product.html',
 })
 export class EditProduct implements OnInit {
@@ -19,20 +23,25 @@ export class EditProduct implements OnInit {
   errorMessage: string = '';
   selectedFile: File | null = null;
   imagePreview: string | null = null;
+  cores: Color[] = [];
+  tags: Tag[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private productService: ProductService,
+    private colorService: ColorService,
+    private tagService: TagService,
     private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.productId = Number(this.route.snapshot.paramMap.get('id'));
     
     this.initForm();
-    this.loadProductData();
+    await Promise.all([this.loadCores(), this.loadTags()]);
+    await this.loadProductData();
   }
 
   initForm() {
@@ -41,8 +50,26 @@ export class EditProduct implements OnInit {
       descricao: ['', [Validators.required]],
       preco: [0, [Validators.required, Validators.min(0)]],
       quantidade: [1, [Validators.required, Validators.min(1)]],
-      tipoId: [1, [Validators.required]]
+      tipoId: [1, [Validators.required]],
+      coresIds: [[]],
+      tagsIds: [[]],
     });
+  }
+
+  async loadCores() {
+    try {
+      this.cores = await firstValueFrom(this.colorService.getAll());
+    } catch {
+      this.cores = [];
+    }
+  }
+
+  async loadTags() {
+    try {
+      this.tags = await firstValueFrom(this.tagService.getAll());
+    } catch {
+      this.tags = [];
+    }
   }
 
   async loadProductData() {
@@ -55,7 +82,9 @@ export class EditProduct implements OnInit {
         descricao: product.descricao,
         preco: product.preco,
         quantidade: product.quantidade,
-        tipoId: product.tipoId
+        tipoId: product.tipoId,
+        coresIds: product.coresIds ?? [],
+        tagsIds: product.tagsIds ?? [],
       });
 
       if (product.fotos) {
@@ -97,7 +126,17 @@ export class EditProduct implements OnInit {
       formData.append('preco', this.productForm.get('preco')?.value);
       formData.append('quantidade', this.productForm.get('quantidade')?.value);
       formData.append('tipoId', this.productForm.get('tipoId')?.value);
-      
+
+      const coresIds = this.productForm.get('coresIds')?.value;
+      if (coresIds && coresIds.length > 0) {
+        formData.append('coresIds', coresIds.join(','));
+      }
+
+      const tagsIds = this.productForm.get('tagsIds')?.value;
+      if (tagsIds && tagsIds.length > 0) {
+        formData.append('tagsIds', tagsIds.join(','));
+      }
+
       if (this.selectedFile) {
         formData.append('fotos', this.selectedFile);
       }

@@ -73,6 +73,10 @@
           </select>
         </div>
 
+        <app-multi-select label="Cores:" controlName="coresIds" [options]="cores" />
+
+        <app-multi-select label="Tags:" controlName="tagsIds" [options]="tags" />
+
         <div class="flex flex-col gap-2 pt-2">
           <label class="text-sm font-semibold text-gray-700">Imagem do Produto</label>
           
