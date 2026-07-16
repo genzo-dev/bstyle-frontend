@@ -1,13 +1,19 @@
 import { z } from 'zod';
+import { isValidPhone } from '../../utils/masks/phone-mask';
 
 export const userSchema = z.object({
-  login: z.string(),
+  login: z.string().nonempty('Informe um login'),
   nome: z
     .string()
     .min(3, { message: 'O nome deve ter pelo menos 3 caracteres' })
     .nonempty('Insira seu nome'),
   senha: z.string().nonempty('Insira uma senha'),
-  telefone: z.string().optional(),
+  telefone: z
+    .string()
+    .refine((val) => !val || isValidPhone(val), {
+      message: 'Telefone inválido. Use o formato (XX) XXXXX-XXXX',
+    })
+    .optional(),
   cidade: z.string().optional(),
   estado: z.string().optional(),
   rua: z.string().optional(),
@@ -15,14 +21,19 @@ export const userSchema = z.object({
 });
 
 export const userCreateBase = z.object({
-  login: z.string(),
+  login: z.string().nonempty('Informe um login'),
   nome: z
     .string()
     .min(3, { message: 'O nome deve ter pelo menos 3 caracteres' })
     .nonempty('Insira seu nome'),
   senha: z.string().nonempty('Insira uma senha'),
-  senha2: z.string().nonempty(),
-  telefone: z.string().optional(),
+  senha2: z.string().nonempty('Confirme a senha'),
+  telefone: z
+    .string()
+    .refine((val) => !val || isValidPhone(val), {
+      message: 'Telefone inválido. Use o formato (XX) XXXXX-XXXX',
+    })
+    .optional(),
   cidade: z.string().optional(),
   estado: z.string().optional(),
   rua: z.string().optional(),
@@ -49,7 +60,12 @@ export const userUpdateSchema = z.object({
     .min(3, { message: 'O nome deve ter pelo menos 3 caracteres' })
     .or(z.literal(''))
     .optional(),
-  telefone: z.string().optional(),
+  telefone: z
+    .string()
+    .refine((val) => !val || isValidPhone(val), {
+      message: 'Telefone inválido. Use o formato (XX) XXXXX-XXXX',
+    })
+    .optional(),
   cidade: z.string().optional(),
   estado: z.string().optional(),
   rua: z.string().optional(),
